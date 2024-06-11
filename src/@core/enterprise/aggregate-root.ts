@@ -4,7 +4,7 @@ import { Entity } from '@/@core/enterprise/entity';
 import { type IDomainEvent } from '@/@core/enterprise/events/domain-event';
 import { DomainEvents } from '@/@core/enterprise/events/domain-events';
 
-export class AggregateRoot<T> extends Entity<EntityId, T> {
+export class AggregateRoot<Id extends EntityId, T> extends Entity<Id, T> {
 	#domainEvents: IDomainEvent[] = [];
 
 	protected validate(): void {}

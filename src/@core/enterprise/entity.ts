@@ -25,7 +25,7 @@ export abstract class Entity<Id extends EntityId, Props> {
 		this.createdAt = new Date();
 	}
 
-	self(): Props {
+	getProps(): Props {
 		const copyObj = {
 			...this.#props,
 		};
