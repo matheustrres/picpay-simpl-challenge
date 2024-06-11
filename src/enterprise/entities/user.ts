@@ -1,4 +1,4 @@
-import { type UserId } from './user-id';
+import { UserId } from './user-id';
 import { type CPF } from './value-objects/cpf';
 import { type Email } from './value-objects/email';
 
@@ -20,7 +20,20 @@ export abstract class User<Props extends UserProps> extends Entity<
 	UserId,
 	Props
 > {
-	protected constructor(props: UserConstructorProps<Props>) {
-		super(props);
+	protected static $createUser<Props extends UserProps, T extends User<Props>>(
+		this: new (props: CreateEntityProps<UserId, Props>) => T,
+		props: Props,
+	): T {
+		return new this({
+			id: new UserId(),
+			props,
+		});
+	}
+
+	protected static $restoreUser<Props extends UserProps, T extends User<Props>>(
+		this: new (props: CreateEntityProps<UserId, Props>) => T,
+		props: CreateEntityProps<UserId, Props>,
+	): T {
+		return new this(props);
 	}
 }

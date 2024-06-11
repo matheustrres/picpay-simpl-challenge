@@ -1,5 +1,5 @@
 import { User, type UserProps } from './user';
-import { UserId } from './user-id';
+import { type UserId } from './user-id';
 import { type CNPJ } from './value-objects/cnpj';
 
 import { type CreateEntityProps } from '@/@core/enterprise/entity';
@@ -14,19 +14,12 @@ export type ShopkeeperConstructorProps = CreateEntityProps<
 >;
 
 export class Shopkeeper extends User<ShopkeeperProps> {
-	private constructor(props: ShopkeeperConstructorProps) {
-		super(props);
-	}
-
 	static create(props: ShopkeeperProps): Shopkeeper {
-		return new Shopkeeper({
-			id: new UserId(),
-			props,
-		});
+		return this.$createUser(props);
 	}
 
 	static restore(props: ShopkeeperConstructorProps): Shopkeeper {
-		return new Shopkeeper(props);
+		return this.$restoreUser(props);
 	}
 
 	protected validate(): void {}
