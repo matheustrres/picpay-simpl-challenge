@@ -16,4 +16,15 @@ describe('Customer', () => {
 		deepStrictEqual(customer.getProps().fullName, 'John Doe');
 		deepStrictEqual(customer instanceof Customer, true);
 	});
+
+	it('should restore a Customer', () => {
+		const customer = new CustomerBuilder().build();
+
+		const restoredCustomer = Customer.restore({
+			id: customer.id,
+			props: customer.getProps(),
+		});
+
+		deepStrictEqual(restoredCustomer, customer);
+	});
 });
