@@ -1,12 +1,12 @@
-import { randomUUID } from 'node:crypto';
+import { type UniqueId } from './ports/unique-id';
 
-import { type UniqueId } from '@/@core/enterprise/ports/unique-id';
+type Id = string | number;
 
 export class EntityId implements UniqueId<EntityId> {
-	readonly #value: string;
+	readonly #value: Id;
 
-	constructor(value?: string) {
-		this.#value = value || randomUUID();
+	constructor(value: Id) {
+		this.#value = value;
 	}
 
 	equalsTo(id: EntityId): boolean {
@@ -14,6 +14,10 @@ export class EntityId implements UniqueId<EntityId> {
 	}
 
 	toString(): string {
-		return this.#value;
+		return this.#value.toString();
+	}
+
+	toNumber(): number {
+		return parseInt(this.toString());
 	}
 }
