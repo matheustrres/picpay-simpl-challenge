@@ -29,6 +29,7 @@
 					"sibling",
 					"parent",
 					"/^@/@core/",
+					"/^@/enterprise/",
 					"/^@/ioC/",
 					"/^#/"
 				],
