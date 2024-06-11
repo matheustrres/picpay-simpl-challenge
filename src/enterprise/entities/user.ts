@@ -1,11 +1,8 @@
-import { UserId } from './user-id';
+import { type UserId } from './user-id';
 import { type CPF } from './value-objects/cpf';
 import { type Email } from './value-objects/email';
 
-import { AggregateRoot } from '@/@core/enterprise/aggregate-root';
-import { type CreateEntityProps } from '@/@core/enterprise/entity';
-
-import { UserCreatedEvent } from '@/enterprise/events/user-created';
+import { Entity, type CreateEntityProps } from '@/@core/enterprise/entity';
 
 export type UserProps = {
 	fullName: string;
@@ -14,25 +11,16 @@ export type UserProps = {
 	password: string;
 };
 
-type UserConstructorProps = CreateEntityProps<UserId, UserProps>;
+export type UserConstructorProps<Props extends UserProps> = CreateEntityProps<
+	UserId,
+	Props
+>;
 
-export class User extends AggregateRoot<UserId, UserProps> {
-	private constructor(props: UserConstructorProps) {
+export abstract class User<Props extends UserProps> extends Entity<
+	UserId,
+	Props
+> {
+	protected constructor(props: UserConstructorProps<Props>) {
 		super(props);
-	}
-
-	static create(props: UserProps): User {
-		const user = new User({
-			id: new UserId(),
-			props,
-		});
-
-		user.addDomainEvent(new UserCreatedEvent(user));
-
-		return user;
-	}
-
-	static restore(props: UserConstructorProps): User {
-		return new User(props);
 	}
 }

@@ -2,39 +2,38 @@ import { faker } from '@faker-js/faker';
 
 import { Builder } from '../builder';
 
-import { User, type UserProps } from '@/enterprise/entities/user';
+import { type User, type UserProps } from '@/enterprise/entities/user';
 import { CPF } from '@/enterprise/entities/value-objects/cpf';
 import { Email } from '@/enterprise/entities/value-objects/email';
 
-export class UserBuilder extends Builder<UserProps, User> {
-	protected input: UserProps = {
+export abstract class UserBuilder<
+	Props extends UserProps,
+	Entity extends User<Props>,
+> extends Builder<Props, Entity> {
+	protected input: Props = {
 		fullName: faker.person.fullName(),
 		email: Email.create(faker.internet.email()),
 		CPF: CPF.create('938.549.360-44'),
 		password: faker.internet.password(),
-	};
+	} as Props;
 
-	withFullName(fullName: string): this {
-		this.input.fullName = fullName;
+	withCPF(value: string): this {
+		this.input.CPF = CPF.create(value);
 		return this;
 	}
 
-	withEmail(email: string): this {
-		this.input.email = Email.create(email);
+	withEmail(value: string): this {
+		this.input.email = Email.create(value);
 		return this;
 	}
 
-	withCPF(cpf: string): this {
-		this.input.CPF = CPF.create(cpf);
+	withFullName(value: string): this {
+		this.input.fullName = value;
 		return this;
 	}
 
-	withPassword(password: string): this {
-		this.input.password = password;
+	withPassword(value: string): this {
+		this.input.password = value;
 		return this;
-	}
-
-	build(): User {
-		return User.create(this.input);
 	}
 }
