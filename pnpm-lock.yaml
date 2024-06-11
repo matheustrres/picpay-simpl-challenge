@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@brazilian-utils/brazilian-utils':
+        specifier: 1.0.0-rc.12
+        version: 1.0.0-rc.12
       '@nestjs/cli':
         specifier: ^10.3.2
         version: 10.3.2(@swc/cli@0.3.12(@swc/core@1.5.27(@swc/helpers@0.5.11))(chokidar@3.6.0))(@swc/core@1.5.27(@swc/helpers@0.5.11))
@@ -125,6 +128,9 @@ packages:
   '@babel/highlight@7.24.7':
     resolution: {integrity: sha512-EStJpq4OuY8xYfhGVXngigBJRWxftKX9ksiGDnmlY3o7B/V7KIAc9X4oiK87uPJSc/vs5L869bem5fhZa8caZw==}
     engines: {node: '>=6.9.0'}
+
+  '@brazilian-utils/brazilian-utils@1.0.0-rc.12':
+    resolution: {integrity: sha512-gR5TbSKTgFgDe0/ZghgwqCEryLbHjwdEpvr3ao/Z0f8zRu6LD3lif0HJ3eQiC3pJSwtUPyA+97vm1IEqZkYSTA==}
 
   '@colors/colors@1.5.0':
     resolution: {integrity: sha512-ooWCrlZP11i8GImSjTHYHLkvFDP48nS4+204nGb1RiX/WXYHmJA2III9/e2DWVabCESdW7hBAEzHRqUn9OUVvQ==}
@@ -2633,6 +2639,8 @@ snapshots:
       chalk: 2.4.2
       js-tokens: 4.0.0
       picocolors: 1.0.1
+
+  '@brazilian-utils/brazilian-utils@1.0.0-rc.12': {}
 
   '@colors/colors@1.5.0':
     optional: true
