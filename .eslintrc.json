@@ -31,6 +31,7 @@
 					"/^@/@core/",
 					"/^@/enterprise/",
 					"/^@/ioC/",
+					"/^@/utils/",
 					"/^#/"
 				],
 				"alphabetize": {

@@ -1,9 +1,9 @@
 import { deepStrictEqual } from 'node:assert';
 import { describe, it } from 'node:test';
 
-import { clearString } from '@/utils/funcs/clear-string';
-
 import { Shopkeeper } from '@/enterprise/entities/user/shopkeeper';
+
+import { clearString } from '@/utils/funcs/clear-string';
 
 import { ShopkeeperBuilder } from '#/data/builders/entities/user/shopkeeper';
 

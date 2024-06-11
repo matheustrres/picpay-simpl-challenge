@@ -1,9 +1,10 @@
 import { BrazilianUtils } from '@/@libs/brazilian-utils';
-import { clearString } from '@/utils/funcs/clear-string';
 
 import { ValueObject } from '@/@core/enterprise/value-object';
 
 import { CNPJIsInvalidError } from '@/enterprise/errors/cnpj';
+
+import { clearString } from '@/utils/funcs/clear-string';
 
 type CNPJProps = {
 	value: string;
