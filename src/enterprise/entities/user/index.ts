@@ -1,6 +1,6 @@
-import { UserId } from './user-id';
 import { type CPF } from './value-objects/cpf';
 import { type Email } from './value-objects/email';
+import { UserId } from './value-objects/user-id';
 
 import { Entity, type CreateEntityProps } from '@/@core/enterprise/entity';
 

@@ -1,5 +1,6 @@
-import { User, type UserProps } from './user';
-import { type UserId } from './user-id';
+import { User, type UserProps } from './index';
+
+import { type UserId } from './value-objects/user-id';
 
 import { type CreateEntityProps } from '@/@core/enterprise/entity';
 

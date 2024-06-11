@@ -1,7 +1,7 @@
 import { deepStrictEqual, throws } from 'node:assert';
 import { describe, it } from 'node:test';
 
-import { Email } from '@/enterprise/entities/value-objects/email';
+import { Email } from '@/enterprise/entities/user/value-objects/email';
 import { EmailIsInvalidError } from '@/enterprise/errors/email';
 
 describe('Email', () => {

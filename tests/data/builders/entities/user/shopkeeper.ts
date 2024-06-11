@@ -3,8 +3,8 @@ import { UserBuilder } from './user';
 import {
 	Shopkeeper,
 	type ShopkeeperProps,
-} from '@/enterprise/entities/shopkeeper';
-import { CNPJ } from '@/enterprise/entities/value-objects/cnpj';
+} from '@/enterprise/entities/user/shopkeeper';
+import { CNPJ } from '@/enterprise/entities/user/value-objects/cnpj';
 
 export class ShopkeeperBuilder extends UserBuilder<
 	ShopkeeperProps,

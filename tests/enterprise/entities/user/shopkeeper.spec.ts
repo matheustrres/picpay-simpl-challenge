@@ -3,9 +3,9 @@ import { describe, it } from 'node:test';
 
 import { clearString } from '@/utils/funcs/clear-string';
 
-import { Shopkeeper } from '@/enterprise/entities/shopkeeper';
+import { Shopkeeper } from '@/enterprise/entities/user/shopkeeper';
 
-import { ShopkeeperBuilder } from '#/data/builders/entities/shopkeeper';
+import { ShopkeeperBuilder } from '#/data/builders/entities/user/shopkeeper';
 
 describe('Shopkeeper', () => {
 	it('should create a Shopkeeper', () => {

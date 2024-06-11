@@ -2,9 +2,9 @@ import { describe, it } from 'node:test';
 
 import { deepStrictEqual } from 'assert';
 
-import { Customer } from '@/enterprise/entities/customer';
+import { Customer } from '@/enterprise/entities/user/customer';
 
-import { CustomerBuilder } from '#/data/builders/entities/customer';
+import { CustomerBuilder } from '#/data/builders/entities/user/customer';
 
 describe('Customer', () => {
 	it('should create a Customer', () => {

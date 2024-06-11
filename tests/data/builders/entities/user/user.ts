@@ -1,10 +1,10 @@
 import { faker } from '@faker-js/faker';
 
-import { Builder } from '../builder';
+import { Builder } from '../../builder';
 
 import { type User, type UserProps } from '@/enterprise/entities/user';
-import { CPF } from '@/enterprise/entities/value-objects/cpf';
-import { Email } from '@/enterprise/entities/value-objects/email';
+import { CPF } from '@/enterprise/entities/user/value-objects/cpf';
+import { Email } from '@/enterprise/entities/user/value-objects/email';
 
 export abstract class UserBuilder<
 	Props extends UserProps,

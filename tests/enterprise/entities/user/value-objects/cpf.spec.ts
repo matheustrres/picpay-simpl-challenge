@@ -3,7 +3,7 @@ import { describe, it } from 'node:test';
 
 import { clearString } from '@/utils/funcs/clear-string';
 
-import { CPF } from '@/enterprise/entities/value-objects/cpf';
+import { CPF } from '@/enterprise/entities/user/value-objects/cpf';
 import { CPFIsInvalidError } from '@/enterprise/errors/cpf';
 
 describe('CPF', () => {
