@@ -19,4 +19,15 @@ describe('Shopkeeper', () => {
 		);
 		deepStrictEqual(shopkeeper instanceof Shopkeeper, true);
 	});
+
+	it('should restore a Shopkeeper', () => {
+		const shopkeeper = new ShopkeeperBuilder().build();
+
+		const restoredShopkeeper = Shopkeeper.restore({
+			id: shopkeeper.id,
+			props: shopkeeper.getProps(),
+		});
+
+		deepStrictEqual(restoredShopkeeper, shopkeeper);
+	});
 });
