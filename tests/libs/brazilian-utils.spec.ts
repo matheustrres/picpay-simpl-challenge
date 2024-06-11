@@ -14,7 +14,10 @@ describe('BrazilianUtils lib', () => {
 
 		it('should return true if a valid value is provided', () => {
 			deepStrictEqual(BrazilianUtils.isValidEmail('john.doe@gmail.com'), true);
-			deepStrictEqual(BrazilianUtils.isValidEmail('adam_smith.uk@live.com'), true);
+			deepStrictEqual(
+				BrazilianUtils.isValidEmail('adam_smith.uk@live.com'),
+				true,
+			);
 		});
 	});
 
