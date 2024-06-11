@@ -15,11 +15,11 @@ export type ShopkeeperConstructorProps = CreateEntityProps<
 
 export class Shopkeeper extends User<ShopkeeperProps> {
 	static create(props: ShopkeeperProps): Shopkeeper {
-		return this.$createUser(props);
+		return this.$createUser<ShopkeeperProps, Shopkeeper>(props);
 	}
 
 	static restore(props: ShopkeeperConstructorProps): Shopkeeper {
-		return this.$restoreUser(props);
+		return this.$restoreUser<ShopkeeperProps, Shopkeeper>(props);
 	}
 
 	protected validate(): void {}

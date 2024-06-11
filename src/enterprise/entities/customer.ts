@@ -9,11 +9,11 @@ export type CustomerConstructorProps = CreateEntityProps<UserId, CustomerProps>;
 
 export class Customer extends User<CustomerProps> {
 	static create(props: CustomerProps): Customer {
-		return this.$createUser(props);
+		return this.$createUser<CustomerProps, Customer>(props);
 	}
 
 	static restore(props: CustomerConstructorProps): Customer {
-		return this.$restoreUser(props);
+		return this.$restoreUser<CustomerProps, Customer>(props);
 	}
 
 	protected validate(): void {}
