@@ -5,16 +5,23 @@ import { deepStrictEqual } from 'assert';
 import { Customer } from '@/enterprise/entities/user/customer';
 
 import { CustomerBuilder } from '#/data/builders/entities/user/customer';
+import { WalletBuilder } from '#/data/builders/entities/wallet/wallet';
 
 describe('Customer', () => {
 	it('should create a Customer', () => {
+		const wallet = new WalletBuilder().withBalance(0).build();
+
 		const customer = new CustomerBuilder()
 			.withFullName('John Doe')
 			.withPassword('youshallnotpass')
+			.withWallet(wallet)
 			.build();
 
-		deepStrictEqual(customer.getProps().fullName, 'John Doe');
+		const { fullName, wallet: customerWallet } = customer.getProps();
+
 		deepStrictEqual(customer instanceof Customer, true);
+		deepStrictEqual(fullName, 'John Doe');
+		deepStrictEqual(customerWallet.getProps().balance, 0);
 	});
 
 	it('should restore a Customer', () => {

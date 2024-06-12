@@ -1,10 +1,12 @@
 import { faker } from '@faker-js/faker';
 
 import { Builder } from '../../builder';
+import { WalletBuilder } from '../wallet/wallet';
 
 import { type User, type UserProps } from '@/enterprise/entities/user';
 import { CPF } from '@/enterprise/entities/user/value-objects/cpf';
 import { Email } from '@/enterprise/entities/user/value-objects/email';
+import { type Wallet } from '@/enterprise/entities/wallet';
 
 export abstract class UserBuilder<
 	Props extends UserProps,
@@ -15,6 +17,7 @@ export abstract class UserBuilder<
 		email: Email.create(faker.internet.email()),
 		CPF: CPF.create('938.549.360-44'),
 		password: faker.internet.password(),
+		wallet: new WalletBuilder().build(),
 	} as Props;
 
 	withCPF(value: string): this {
@@ -34,6 +37,11 @@ export abstract class UserBuilder<
 
 	withPassword(value: string): this {
 		this.input.password = value;
+		return this;
+	}
+
+	withWallet(wallet: Wallet): this {
+		this.input.wallet = wallet;
 		return this;
 	}
 }
