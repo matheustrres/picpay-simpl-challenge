@@ -1,14 +1,14 @@
 import { faker } from '@faker-js/faker';
 
-import { Builder } from '../../builder';
-import { CustomerBuilder } from '../user/customer';
-import { ShopkeeperBuilder } from '../user/shopkeeper';
-
 import { type UserId } from '@/enterprise/entities/user/value-objects/user-id';
 import {
 	Transaction,
 	type TransactionProps,
 } from '@/enterprise/entities/wallet/transaction';
+
+import { Builder } from '#/data/builders/builder';
+import { CustomerBuilder } from '#/data/builders/entities/user/customer';
+import { ShopkeeperBuilder } from '#/data/builders/entities/user/shopkeeper';
 
 export class TransactionBuilder extends Builder<TransactionProps, Transaction> {
 	protected input: TransactionProps = {
