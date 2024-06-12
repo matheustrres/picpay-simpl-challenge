@@ -1,6 +1,8 @@
 import { deepStrictEqual } from 'node:assert';
 import { describe, it } from 'node:test';
 
+import { Transaction } from '@/enterprise/entities/wallet/transaction';
+
 import { TransactionBuilder } from '#/data/builders/entities/wallet/transaction';
 
 describe('Transaction', () => {
@@ -14,5 +16,16 @@ describe('Transaction', () => {
 
 		deepStrictEqual(amount, 1000);
 		deepStrictEqual(description, 'Just bought a PS5');
+	});
+
+	it('should restore a Transaction', () => {
+		const transaction = new TransactionBuilder().build();
+
+		const restoredTransaction = Transaction.restore({
+			id: transaction.id,
+			props: transaction.getProps(),
+		});
+
+		deepStrictEqual(restoredTransaction, transaction);
 	});
 });
