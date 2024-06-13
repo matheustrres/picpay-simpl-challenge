@@ -5,6 +5,7 @@ import { CreateUserService } from '@/application/services/create-user';
 
 import { type User, type UserProps } from '@/enterprise/entities/user';
 import { CPFError } from '@/enterprise/errors/cpf';
+import { EmailError } from '@/enterprise/errors/email';
 
 import {
 	makeMockedHashProvider,
@@ -45,5 +46,19 @@ describe('CreateUserService', () => {
 
 		strictEqual(isLeft(), true);
 		strictEqual(value instanceof CPFError, true);
+	});
+
+	it('should return EmailError if email creation fails', async () => {
+		const { sut } = makeSUT();
+
+		const { isLeft, value } = await sut.exec({
+			fullName: 'John Doe',
+			email: 'john.@com',
+			cpf: '760.330.180-79',
+			password: 'youshallnotpass',
+		});
+
+		strictEqual(isLeft(), true);
+		strictEqual(value instanceof EmailError, true);
 	});
 });
