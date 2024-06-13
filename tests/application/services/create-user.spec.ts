@@ -1,12 +1,14 @@
 import { strictEqual } from 'node:assert';
 import { describe, it } from 'node:test';
 
+import { UserAlreadyExistsError } from '@/application/errors/user';
 import { CreateUserService } from '@/application/services/create-user';
 
 import { type User, type UserProps } from '@/enterprise/entities/user';
 import { CPFError } from '@/enterprise/errors/cpf';
 import { EmailError } from '@/enterprise/errors/email';
 
+import { CustomerBuilder } from '#/data/builders/entities/user/customer';
 import {
 	makeMockedHashProvider,
 	type MockedHashProvider,
@@ -60,5 +62,23 @@ describe('CreateUserService', () => {
 
 		strictEqual(isLeft(), true);
 		strictEqual(value instanceof EmailError, true);
+	});
+
+	it('should return UserAlreadyExistsError if given CPF is already in use', async () => {
+		const { sut, usersRepository } = makeSUT();
+
+		const user = new CustomerBuilder().build();
+
+		usersRepository.findByCPF.mock.mockImplementationOnce(() => user);
+
+		const { isLeft, value } = await sut.exec({
+			fullName: 'John Doe',
+			email: 'john.doe@gmail.com',
+			cpf: user.getProps().CPF.props.value,
+			password: 'youshallnotpass',
+		});
+
+		strictEqual(isLeft(), true);
+		strictEqual(value instanceof UserAlreadyExistsError, true);
 	});
 });
