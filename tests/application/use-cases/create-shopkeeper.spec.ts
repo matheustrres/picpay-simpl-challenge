@@ -1,8 +1,9 @@
-import { strictEqual } from 'node:assert';
+import { deepStrictEqual, strictEqual } from 'node:assert';
 import { describe, it } from 'node:test';
 
 import { CreateShopkeeperUseCase } from '@/application/use-cases/create-shopkeeper';
 
+import { Shopkeeper } from '@/enterprise/entities/user/shopkeeper';
 import { CNPJError } from '@/enterprise/errors/cnpj';
 
 import { CreateShopkeeperUseCaseBuilder } from '#/data/builders/use-cases/create-shopkeeper';
@@ -33,7 +34,7 @@ function makeSUT(): SUT {
 }
 
 describe('CreateShopkeeperUseCase', () => {
-	it('should return CNPJError if CNPJ creation fails', async () => {
+	it('should return CNPJError if CNPJ creation fails [LEFT]', async () => {
 		const { sut } = makeSUT();
 
 		const { isLeft, isRight, value } = await sut.exec(
@@ -43,5 +44,24 @@ describe('CreateShopkeeperUseCase', () => {
 		strictEqual(isLeft(), true);
 		strictEqual(isRight(), false);
 		strictEqual(value instanceof CNPJError, true);
+	});
+
+	it('should return a Shopkeeper [RIGHT]', async () => {
+		const { sut, usersRepository } = makeSUT();
+
+		usersRepository.findByCPF.mock.mockImplementationOnce(() => null);
+		usersRepository.findByEmail.mock.mockImplementationOnce(() => null);
+		usersRepository.findByCNPJ.mock.mockImplementationOnce(() => null);
+
+		const { isLeft, isRight, value } = await sut.exec(
+			new CreateShopkeeperUseCaseBuilder()
+				.withFullName('Adam Smith')
+				.withCNPJ('51.970.233/0001-58')
+				.getProps(),
+		);
+
+		strictEqual(isRight(), true);
+		strictEqual(isLeft(), false);
+		deepStrictEqual(value instanceof Shopkeeper, true);
 	});
 });
