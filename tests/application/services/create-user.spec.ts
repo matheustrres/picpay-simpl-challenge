@@ -81,4 +81,22 @@ describe('CreateUserService', () => {
 		strictEqual(isLeft(), true);
 		strictEqual(value instanceof UserAlreadyExistsError, true);
 	});
+
+	it('should return UserAlreadyExistsError if given email address is already in use', async () => {
+		const { sut, usersRepository } = makeSUT();
+
+		const user = new CustomerBuilder().build();
+
+		usersRepository.findByEmail.mock.mockImplementationOnce(() => user);
+
+		const { isLeft, value } = await sut.exec({
+			fullName: 'John Doe',
+			email: user.getProps().email.props.value,
+			cpf: '760.330.180-79',
+			password: 'youshallnotpass',
+		});
+
+		strictEqual(isLeft(), true);
+		strictEqual(value instanceof UserAlreadyExistsError, true);
+	});
 });
