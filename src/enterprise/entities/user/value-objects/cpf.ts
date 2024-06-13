@@ -4,7 +4,7 @@ import { ValueObject } from '@/@core/enterprise/value-object';
 
 import { CPFIsInvalidError } from '@/enterprise/errors/cpf';
 
-import { clearString } from '@/utils/funcs/clear-string';
+import { clearString } from '@/shared/utils/funcs/clear-string';
 
 type CPFProps = {
 	value: string;

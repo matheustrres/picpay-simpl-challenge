@@ -4,7 +4,7 @@ import { describe, it } from 'node:test';
 import { CPF } from '@/enterprise/entities/user/value-objects/cpf';
 import { CPFIsInvalidError } from '@/enterprise/errors/cpf';
 
-import { clearString } from '@/utils/funcs/clear-string';
+import { clearString } from '@/shared/utils/funcs/clear-string';
 
 describe('CPF', () => {
 	it('should throw if an invalid CPF is provided', () => {

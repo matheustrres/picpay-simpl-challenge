@@ -4,7 +4,7 @@ import { ValueObject } from '@/@core/enterprise/value-object';
 
 import { CNPJIsInvalidError } from '@/enterprise/errors/cnpj';
 
-import { clearString } from '@/utils/funcs/clear-string';
+import { clearString } from '@/shared/utils/funcs/clear-string';
 
 type CNPJProps = {
 	value: string;

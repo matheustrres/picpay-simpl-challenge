@@ -3,7 +3,7 @@ import { describe, it } from 'node:test';
 
 import { Shopkeeper } from '@/enterprise/entities/user/shopkeeper';
 
-import { clearString } from '@/utils/funcs/clear-string';
+import { clearString } from '@/shared/utils/funcs/clear-string';
 
 import { ShopkeeperBuilder } from '#/data/builders/entities/user/shopkeeper';
 import { WalletBuilder } from '#/data/builders/entities/wallet/wallet';

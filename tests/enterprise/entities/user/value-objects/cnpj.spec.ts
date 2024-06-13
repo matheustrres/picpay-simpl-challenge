@@ -4,7 +4,7 @@ import { describe, it } from 'node:test';
 import { CNPJ } from '@/enterprise/entities/user/value-objects/cnpj';
 import { CNPJIsInvalidError } from '@/enterprise/errors/cnpj';
 
-import { clearString } from '@/utils/funcs/clear-string';
+import { clearString } from '@/shared/utils/funcs/clear-string';
 
 describe('CNPJ', () => {
 	it('should throw if an invalid CNPJ is provided', () => {

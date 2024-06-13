@@ -31,8 +31,8 @@
 					"/^@/@core/",
 					"/^@/application/",
 					"/^@/enterprise/",
-					"/^@/ioC/",
-					"/^@/utils/",
+					"/^@/infrastructure/",
+					"/^@/shared/",
 					"/^#/"
 				],
 				"alphabetize": {
