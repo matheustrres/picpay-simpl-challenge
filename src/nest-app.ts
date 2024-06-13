@@ -8,7 +8,7 @@ import express from 'express';
 import helmet from 'helmet';
 
 import { Application } from './app';
-import { AppModule } from './ioC/app.module';
+import { AppModule } from './infrastructure/ioC/app.module';
 
 export class NestApplication extends Application {
 	#app!: INestApplication;
