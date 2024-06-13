@@ -11,13 +11,19 @@ export class UserAlreadyExistsError extends UserError {
 		super(message);
 	}
 
-	static byCPF(CPF: string): UserAlreadyExistsError {
-		return new UserAlreadyExistsError(`Given CPF "${CPF}" is already taken.`);
+	static byCNPJ(value: string): UserAlreadyExistsError {
+		return new UserAlreadyExistsError(
+			`Given CNPJ "${value}" is already taken.`,
+		);
 	}
 
-	static byEmail(email: string): UserAlreadyExistsError {
+	static byCPF(value: string): UserAlreadyExistsError {
+		return new UserAlreadyExistsError(`Given CPF "${value}" is already taken.`);
+	}
+
+	static byEmail(value: string): UserAlreadyExistsError {
 		return new UserAlreadyExistsError(
-			`Given email address "${email}" is already taken.`,
+			`Given e-mail address "${value}" is already taken.`,
 		);
 	}
 }
