@@ -4,6 +4,7 @@ import { UserId } from './value-objects/user-id';
 
 import { type Wallet } from '../wallet';
 
+import { type ROLE } from '@/@core/enterprise/constants/role';
 import { Entity, type CreateEntityProps } from '@/@core/enterprise/entity';
 
 export type UserProps = {
@@ -23,6 +24,8 @@ export abstract class User<Props extends UserProps> extends Entity<
 	UserId,
 	Props
 > {
+	protected abstract readonly role: ROLE;
+
 	protected static $createUser<Props extends UserProps, T extends User<Props>>(
 		this: new (props: CreateEntityProps<UserId, Props>) => T,
 		props: Props,
@@ -38,5 +41,9 @@ export abstract class User<Props extends UserProps> extends Entity<
 		props: CreateEntityProps<UserId, Props>,
 	): T {
 		return new this(props);
+	}
+
+	getRole(): ROLE {
+		return this.role;
 	}
 }

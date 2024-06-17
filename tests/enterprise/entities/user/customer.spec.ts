@@ -2,6 +2,8 @@ import { describe, it } from 'node:test';
 
 import { deepStrictEqual } from 'assert';
 
+import { ROLE } from '@/@core/enterprise/constants/role';
+
 import { Customer } from '@/enterprise/entities/user/customer';
 
 import { CustomerBuilder } from '#/data/builders/entities/user/customer';
@@ -22,6 +24,7 @@ describe('Customer', () => {
 		deepStrictEqual(customer instanceof Customer, true);
 		deepStrictEqual(fullName, 'John Doe');
 		deepStrictEqual(customerWallet.getProps().balance, 0);
+		deepStrictEqual(customer.getRole(), ROLE.CUSTOMER);
 	});
 
 	it('should restore a Customer', () => {
