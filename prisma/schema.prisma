@@ -7,40 +7,36 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id         String      @id @default(uuid())
-  fullName   String
-  email      String      @unique
-  password   String
-  CPF        String      @unique
-  role       String
-  wallet     Wallet      @relation(fields: [walletId], references: [id])
-  walletId   Int         @unique
-  customer   Customer?
-  shopkeeper Shopkeeper?
-  createdAt  DateTime    @default(now()) @map("created_at")
-  updatedAt  DateTime    @updatedAt @map("updated_at")
+model Customer {
+  id        String   @id @default(uuid())
+  fullName  String
+  email     String   @unique
+  password  String
+  CPF       String   @unique
+  role      String
+  wallet    Wallet   @relation(fields: [walletId], references: [id])
+  walletId  Int      @unique
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@index([email, CPF])
-  @@map("users")
-}
-
-model Customer {
-  id     String @id @default(uuid())
-  user   User   @relation(fields: [userId], references: [id])
-  userId String @unique
-
-  @@index([userId])
   @@map("customers")
 }
 
 model Shopkeeper {
-  id     String @id @default(uuid())
-  CNPJ   String @unique
-  user   User   @relation(fields: [userId], references: [id])
-  userId String @unique
+  id        String   @id @default(uuid())
+  fullName  String
+  email     String   @unique
+  password  String
+  CPF       String   @unique
+  CNPJ      String   @unique
+  role      String
+  wallet    Wallet   @relation(fields: [walletId], references: [id])
+  walletId  Int      @unique
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
-  @@index([userId, CNPJ])
+  @@index([email, CPF, CNPJ])
   @@map("shopkeepers")
 }
 
@@ -48,9 +44,10 @@ model Wallet {
   id           Int           @id @default(autoincrement())
   balance      Float         @default(0)
   transactions Transaction[]
-  user         User?
   createdAt    DateTime      @default(now()) @map("created_at")
   updatedAt    DateTime      @updatedAt @map("updated_at")
+  customer     Customer?
+  shopkeeper   Shopkeeper?
 
   @@map("wallets")
 }
