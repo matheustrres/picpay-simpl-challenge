@@ -27,3 +27,21 @@ export class UserAlreadyExistsError extends UserError {
 		);
 	}
 }
+
+export class UserNotFoundError extends UserError {
+	private constructor(message: string) {
+		super(message);
+	}
+
+	static byEmail(value: string): UserNotFoundError {
+		return new UserNotFoundError(
+			`No user with email address "${value}" was found.`,
+		);
+	}
+}
+
+export class UserInvalidCredentialsError extends UserError {
+	constructor(message = 'Invalid credentials.') {
+		super(message);
+	}
+}
