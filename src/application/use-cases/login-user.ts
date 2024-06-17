@@ -14,6 +14,10 @@ import { UsersRepository } from '@/application/repositories/users-repository';
 
 import { type User, type UserProps } from '@/enterprise/entities/user';
 
+export type LoginAccessToken = {
+	accessToken: string;
+};
+
 export type LoginUserUseCaseInput = {
 	email: string;
 	password: string;
@@ -21,9 +25,7 @@ export type LoginUserUseCaseInput = {
 
 export type LoginUserUseCaseOutput = Either<
 	UserNotFoundError | UserInvalidCredentialsError,
-	{
-		accessToken: string;
-	}
+	LoginAccessToken
 >;
 
 @Injectable()

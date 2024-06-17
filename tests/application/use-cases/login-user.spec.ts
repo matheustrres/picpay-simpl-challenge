@@ -5,7 +5,10 @@ import {
 	UserInvalidCredentialsError,
 	UserNotFoundError,
 } from '@/application/errors/user';
-import { LoginUserUseCase } from '@/application/use-cases/login-user';
+import {
+	type LoginAccessToken,
+	LoginUserUseCase,
+} from '@/application/use-cases/login-user';
 
 import { ShopkeeperBuilder } from '#/data/builders/entities/user/shopkeeper';
 import {
@@ -62,7 +65,7 @@ describe('LoginUserUseCase', () => {
 		);
 	});
 
-	it('should fail if given password does not match current user hashed password', async () => {
+	it('should fail if given password does not match current user hashed password [LEFT]', async () => {
 		const { hashProvider, sut, usersRepository } = makeSUT();
 
 		const user = new ShopkeeperBuilder().build();
@@ -81,6 +84,30 @@ describe('LoginUserUseCase', () => {
 			value instanceof UserInvalidCredentialsError &&
 				value.message === 'Invalid credentials.',
 			true,
+		);
+	});
+
+	it('should return an access token [RIGHT]', async () => {
+		const { hashProvider, sut, tokenProvider, usersRepository } = makeSUT();
+
+		const user = new ShopkeeperBuilder().build();
+
+		usersRepository.findByEmail.mock.mockImplementationOnce(() => user);
+		hashProvider.compareStrings.mock.mockImplementationOnce(() => true);
+		tokenProvider.signToken.mock.mockImplementationOnce(
+			() => 'super_random_secret_access_token',
+		);
+
+		const { isLeft, isRight, value } = await sut.exec({
+			email: user.getProps().email.props.value,
+			password: user.getProps().password,
+		});
+
+		strictEqual(isRight(), true);
+		strictEqual(isLeft(), false);
+		deepStrictEqual(
+			(value as LoginAccessToken).accessToken,
+			'super_random_secret_access_token',
 		);
 	});
 });
