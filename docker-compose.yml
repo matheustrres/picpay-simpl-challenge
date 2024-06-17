@@ -1,0 +1,28 @@
+version: '3.9'
+services:
+  # PG database
+  database:
+    container_name: psp_pg
+    image: postgres:latest
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    volumes:
+      - ./db:/var/lib/postgresql/database
+    networks:
+      - psp
+  # PG Admin
+  pg_admin:
+    container_name: psp_pg_admin
+    image: dpage/pgadmin4:latest
+    ports:
+      - 15432:80
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
+    networks:
+      - psp
+networks:
+  psp:
+    driver: bridge
