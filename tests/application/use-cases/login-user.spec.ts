@@ -1,9 +1,13 @@
 import { deepStrictEqual, strictEqual } from 'node:assert';
 import { describe, it } from 'node:test';
 
-import { UserNotFoundError } from '@/application/errors/user';
+import {
+	UserInvalidCredentialsError,
+	UserNotFoundError,
+} from '@/application/errors/user';
 import { LoginUserUseCase } from '@/application/use-cases/login-user';
 
+import { ShopkeeperBuilder } from '#/data/builders/entities/user/shopkeeper';
 import {
 	makeMockedHashProvider,
 	type MockedHashProvider,
@@ -52,8 +56,30 @@ describe('LoginUserUseCase', () => {
 		strictEqual(isRight(), false);
 		deepStrictEqual(
 			value instanceof UserNotFoundError &&
-				value.message ==
+				value.message ===
 					'No user with email address "john.doe@gmail.com" was found.',
+			true,
+		);
+	});
+
+	it('should fail if given password does not match current user hashed password', async () => {
+		const { hashProvider, sut, usersRepository } = makeSUT();
+
+		const user = new ShopkeeperBuilder().build();
+
+		usersRepository.findByEmail.mock.mockImplementationOnce(() => user);
+		hashProvider.compareStrings.mock.mockImplementationOnce(() => false);
+
+		const { isLeft, isRight, value } = await sut.exec({
+			email: 'adamsmith_uk@gmail.com',
+			password: 'different_user_password',
+		});
+
+		strictEqual(isLeft(), true);
+		strictEqual(isRight(), false);
+		deepStrictEqual(
+			value instanceof UserInvalidCredentialsError &&
+				value.message === 'Invalid credentials.',
 			true,
 		);
 	});
