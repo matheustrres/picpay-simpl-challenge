@@ -11,7 +11,7 @@ import { Wallet } from '@/enterprise/entities/wallet';
 import { type CPFError } from '@/enterprise/errors/cpf';
 import { type EmailError } from '@/enterprise/errors/email';
 
-type CreateUserServiceInput = {
+export type CreateUserServiceInput = {
 	fullName: string;
 	email: string;
 	password: string;
@@ -25,7 +25,7 @@ export type CreateUserServiceLeftResult =
 
 export type CreateUserServiceRightResult = UserProps;
 
-type CreateUserServiceOutput = Either<
+export type CreateUserServiceOutput = Either<
 	CreateUserServiceLeftResult,
 	CreateUserServiceRightResult
 >;

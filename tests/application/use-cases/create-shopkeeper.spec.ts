@@ -1,6 +1,7 @@
 import { deepStrictEqual, strictEqual } from 'node:assert';
 import { describe, it } from 'node:test';
 
+import { CreateUserService } from '@/application/services/create-user';
 import { CreateShopkeeperUseCase } from '@/application/use-cases/create-shopkeeper';
 
 import { Shopkeeper } from '@/enterprise/entities/user/shopkeeper';
@@ -17,19 +18,22 @@ import {
 } from '#/data/mocks/repositories/shopkeepers-repository';
 
 type SUT = {
-	usersRepository: MockedShopkeepersRepository;
+	shopkeepersRepository: MockedShopkeepersRepository;
 	hashProvider: MockedHashProvider;
 	sut: CreateShopkeeperUseCase;
 };
 
 function makeSUT(): SUT {
-	const usersRepository = makeMockedShopkeepersRepository();
+	const shopkeepersRepository = makeMockedShopkeepersRepository();
 	const hashProvider = makeMockedHashProvider();
 
 	return {
 		hashProvider,
-		usersRepository,
-		sut: new CreateShopkeeperUseCase(usersRepository, hashProvider),
+		shopkeepersRepository,
+		sut: new CreateShopkeeperUseCase(
+			shopkeepersRepository,
+			new CreateUserService(shopkeepersRepository, hashProvider),
+		),
 	};
 }
 
@@ -47,11 +51,11 @@ describe('CreateShopkeeperUseCase', () => {
 	});
 
 	it('should return a Shopkeeper [RIGHT]', async () => {
-		const { sut, usersRepository } = makeSUT();
+		const { sut, shopkeepersRepository } = makeSUT();
 
-		usersRepository.findByCPF.mock.mockImplementationOnce(() => null);
-		usersRepository.findByEmail.mock.mockImplementationOnce(() => null);
-		usersRepository.findByCNPJ.mock.mockImplementationOnce(() => null);
+		shopkeepersRepository.findByCPF.mock.mockImplementationOnce(() => null);
+		shopkeepersRepository.findByEmail.mock.mockImplementationOnce(() => null);
+		shopkeepersRepository.findByCNPJ.mock.mockImplementationOnce(() => null);
 
 		const { isLeft, isRight, value } = await sut.exec(
 			new CreateShopkeeperUseCaseBuilder()

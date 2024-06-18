@@ -1,15 +1,14 @@
 import { Inject, Injectable } from '@nestjs/common';
 
-import { UserAlreadyExistsError } from '../errors/user';
-import { ShopkeepersRepository } from '../repositories/shopkeepers-repository';
-import {
-	CreateUserService,
-	type CreateUserServiceLeftResult,
-} from '../services/create-user';
-
 import { left, right, type Either } from '@/@core/enterprise/logic/either';
-import { HashProvider } from '@/@core/enterprise/ports/providers/hash-provider';
 import { type UseCase } from '@/@core/enterprise/ports/use-case';
+
+import { UserAlreadyExistsError } from '@/application/errors/user';
+import { ShopkeepersRepository } from '@/application/repositories/shopkeepers-repository';
+import {
+	type CreateUserService,
+	type CreateUserServiceLeftResult,
+} from '@/application/services/create-user';
 
 import {
 	Shopkeeper,
@@ -35,19 +34,14 @@ export type CreateCustomerUseCaseOutput = Either<
 export class CreateShopkeeperUseCase
 	implements UseCase<CreateShopkeeperUseCaseInput, CreateCustomerUseCaseOutput>
 {
-	readonly #createUserService: CreateUserService<ShopkeeperProps, Shopkeeper>;
-
 	constructor(
 		@Inject(ShopkeepersRepository)
 		private readonly shopkeepersRepository: ShopkeepersRepository,
-		@Inject(HashProvider)
-		hashProvider: HashProvider,
-	) {
-		this.#createUserService = new CreateUserService<
+		private readonly createUserService: CreateUserService<
 			ShopkeeperProps,
 			Shopkeeper
-		>(shopkeepersRepository, hashProvider);
-	}
+		>,
+	) {}
 
 	async exec(
 		input: CreateShopkeeperUseCaseInput,
@@ -68,7 +62,7 @@ export class CreateShopkeeperUseCase
 			return left(userAlreadyExistsByCNPJResult.value);
 		}
 
-		const userCreationResult = await this.#createUserService.exec(input);
+		const userCreationResult = await this.createUserService.exec(input);
 
 		if (userCreationResult.isLeft()) {
 			return left(userCreationResult.value);

@@ -1,12 +1,11 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { type Either, left, right } from '@/@core/enterprise/logic/either';
-import { HashProvider } from '@/@core/enterprise/ports/providers/hash-provider';
 import { type UseCase } from '@/@core/enterprise/ports/use-case';
 
 import { CustomersRepository } from '@/application/repositories/customers-repository';
 import {
-	CreateUserService,
+	type CreateUserService,
 	type CreateUserServiceLeftResult,
 } from '@/application/services/create-user';
 
@@ -31,24 +30,19 @@ export type CreateCustomerUseCaseOutput = Either<
 export class CreateCustomerUseCase
 	implements UseCase<CreateCustomerUseCaseInput, CreateCustomerUseCaseOutput>
 {
-	readonly #createUserService: CreateUserService<CustomerProps, Customer>;
-
 	constructor(
 		@Inject(CustomersRepository)
-		usersRepository: CustomersRepository,
-		@Inject(HashProvider)
-		hashProvider: HashProvider,
-	) {
-		this.#createUserService = new CreateUserService(
-			usersRepository,
-			hashProvider,
-		);
-	}
+		private readonly customersRepository: CustomersRepository,
+		private readonly createUserService: CreateUserService<
+			CustomerProps,
+			Customer
+		>,
+	) {}
 
 	async exec(
 		input: CreateCustomerUseCaseInput,
 	): Promise<CreateCustomerUseCaseOutput> {
-		const userCreationResult = await this.#createUserService.exec(input);
+		const userCreationResult = await this.createUserService.exec(input);
 
 		if (userCreationResult.isLeft()) {
 			return left(userCreationResult.value);
@@ -58,7 +52,7 @@ export class CreateCustomerUseCase
 
 		const customer = Customer.create(user);
 
-		await this.#createUserService.usersRepository.upsert(customer);
+		await this.customersRepository.upsert(customer);
 
 		return right(customer);
 	}

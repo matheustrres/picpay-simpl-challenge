@@ -1,6 +1,7 @@
 import { deepStrictEqual, strictEqual } from 'node:assert';
 import { describe, it } from 'node:test';
 
+import { CreateUserService } from '@/application/services/create-user';
 import { CreateCustomerUseCase } from '@/application/use-cases/create-customer';
 
 import { Customer } from '@/enterprise/entities/user/customer';
@@ -16,28 +17,31 @@ import {
 } from '#/data/mocks/repositories/customers-repository';
 
 type SUT = {
-	usersRepository: MockedCustomersRepository;
+	customersRepository: MockedCustomersRepository;
 	hashProvider: MockedHashProvider;
 	sut: CreateCustomerUseCase;
 };
 
 function makeSUT(): SUT {
-	const usersRepository = makeMockedCustomersRepository();
+	const customersRepository = makeMockedCustomersRepository();
 	const hashProvider = makeMockedHashProvider();
 
 	return {
 		hashProvider,
-		usersRepository,
-		sut: new CreateCustomerUseCase(usersRepository, hashProvider),
+		customersRepository,
+		sut: new CreateCustomerUseCase(
+			customersRepository,
+			new CreateUserService(customersRepository, hashProvider),
+		),
 	};
 }
 
 describe('CreateCustomerUseCase', () => {
 	it('should return a Customer [RIGHT]', async () => {
-		const { sut, usersRepository } = makeSUT();
+		const { sut, customersRepository } = makeSUT();
 
-		usersRepository.findByCPF.mock.mockImplementationOnce(() => null);
-		usersRepository.findByEmail.mock.mockImplementationOnce(() => null);
+		customersRepository.findByCPF.mock.mockImplementationOnce(() => null);
+		customersRepository.findByEmail.mock.mockImplementationOnce(() => null);
 
 		const { isLeft, isRight, value } = await sut.exec(
 			new CreateCustomerUseCaseBuilder()
