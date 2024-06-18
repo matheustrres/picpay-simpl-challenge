@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 
 import { PrismaCustomerMapper } from '../mappers/customer-mapper';
-import { type PrismaService } from '../prisma.service';
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
+import { PrismaService } from '../prisma.service';
 
 import { type CustomersRepository } from '@/application/repositories/customers-repository';
 
