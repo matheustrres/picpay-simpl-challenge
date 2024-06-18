@@ -8,6 +8,8 @@ import express from 'express';
 import helmet from 'helmet';
 
 import { Application } from './app';
+import { GlobalExceptionFilter } from './infrastructure/http/filters/global-exception-filter';
+import { ZodExceptionFilter } from './infrastructure/http/filters/zod-exception-filter';
 import { AppModule } from './infrastructure/ioC/app.module';
 
 export class NestApplication extends Application {
@@ -39,6 +41,9 @@ export class NestApplication extends Application {
 		this.context = await NestFactory.createApplicationContext(AppModule);
 
 		this.#app.enableShutdownHooks();
+
+		this.#app.useGlobalFilters(new GlobalExceptionFilter());
+		this.#app.useGlobalFilters(new ZodExceptionFilter());
 	}
 
 	protected setupMiddlewares(): void {
