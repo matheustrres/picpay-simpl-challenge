@@ -14,10 +14,10 @@ model Customer {
   password  String
   CPF       String   @unique
   role      String
-  wallet    Wallet   @relation(fields: [walletId], references: [id])
+  wallet    Wallet?  @relation(fields: [walletId], references: [id])
   walletId  Int      @unique
   createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
 
   @@index([email, CPF])
   @@map("customers")
@@ -31,10 +31,10 @@ model Shopkeeper {
   CPF       String   @unique
   CNPJ      String   @unique
   role      String
-  wallet    Wallet   @relation(fields: [walletId], references: [id])
+  wallet    Wallet?  @relation(fields: [walletId], references: [id])
   walletId  Int      @unique
   createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
 
   @@index([email, CPF, CNPJ])
   @@map("shopkeepers")
@@ -44,10 +44,10 @@ model Wallet {
   id           Int           @id @default(autoincrement())
   balance      Float         @default(0)
   transactions Transaction[]
-  createdAt    DateTime      @default(now()) @map("created_at")
-  updatedAt    DateTime      @updatedAt @map("updated_at")
   customer     Customer?
   shopkeeper   Shopkeeper?
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @default(now()) @updatedAt @map("updated_at")
 
   @@map("wallets")
 }
