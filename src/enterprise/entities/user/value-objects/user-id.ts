@@ -1,10 +1,10 @@
-import { randomUUID } from 'node:crypto';
+import { ulid } from 'ulid';
 
 import { EntityId } from '@/@core/enterprise/entity-id';
 
 export class UserId extends EntityId {
 	constructor(value?: string) {
-		const id = value ?? randomUUID();
+		const id = value ?? ulid(Date.now());
 
 		super(id);
 	}
