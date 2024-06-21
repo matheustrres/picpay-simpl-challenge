@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 
 import { CreateCustomerController } from './controllers/users/create-customer';
+import { CreateShopkeeperController } from './controllers/users/create-shopkeeper';
 
 import { HashProvider } from '@/@core/enterprise/ports/providers/hash-provider';
 
@@ -42,6 +43,6 @@ import { HashingModule } from '@/infrastructure/gateways/adapters/hashing/hashin
 			inject: [ShopkeepersRepository, HashProvider],
 		},
 	],
-	controllers: [CreateCustomerController],
+	controllers: [CreateCustomerController, CreateShopkeeperController],
 })
 export class HttpModule {}
