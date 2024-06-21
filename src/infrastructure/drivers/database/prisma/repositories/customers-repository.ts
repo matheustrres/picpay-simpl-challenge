@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
 import { PrismaCustomerMapper } from '../mappers/customer-mapper';
+import { PrismaWalletMapper } from '../mappers/wallet-mapper';
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import { PrismaService } from '../prisma.service';
 
@@ -69,12 +70,27 @@ export class PrismaCustomersRepository implements CustomersRepository {
 	async upsert(customer: Customer): Promise<void> {
 		const customerMappedToPrisma = new PrismaCustomerMapper().toInfra(customer);
 
-		await this.prismaService.customer.upsert({
-			where: {
-				id: customer.id.toString(),
-			},
-			create: customerMappedToPrisma,
-			update: customerMappedToPrisma,
+		const walletMappedToPrisma = new PrismaWalletMapper().toInfra(
+			customer.getProps().wallet,
+		);
+
+		await this.prismaService.$transaction(async (prisma) => {
+			const wallet = await prisma.wallet.create({
+				data: walletMappedToPrisma,
+			});
+
+			const commonData = {
+				...customerMappedToPrisma,
+				walletId: wallet.id,
+			};
+
+			await prisma.customer.upsert({
+				where: {
+					id: customer.id.toString(),
+				},
+				create: commonData,
+				update: commonData,
+			});
 		});
 	}
 }

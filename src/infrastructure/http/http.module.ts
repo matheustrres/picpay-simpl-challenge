@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 
-import { CreateCustomerController } from './controllers/users/create-customer.controller';
+import { CreateCustomerController } from './controllers/users/create-customer';
 
 import { HashProvider } from '@/@core/enterprise/ports/providers/hash-provider';
 
