@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { hash, compare, genSalt } from '@node-rs/bcrypt';
+import { hash, compare } from '@node-rs/bcrypt';
 
 import { type HashProvider } from '@/@core/enterprise/ports/providers/hash-provider';
 
@@ -10,8 +10,6 @@ export class HashingService implements HashProvider {
 	}
 
 	async hashString(str: string): Promise<string> {
-		const salt = await genSalt(9);
-
-		return hash(str, 12, Buffer.from(salt));
+		return hash(str, 12);
 	}
 }
