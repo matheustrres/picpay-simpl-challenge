@@ -1,9 +1,14 @@
+import { randomInt } from 'node:crypto';
+
 import { EntityId } from '@/@core/enterprise/entity-id';
 
-import { genTimestampNumericId } from '@/shared/utils/funcs/random-timestamp-id';
-
+/**
+ * @todo
+ *
+ * Improve way of generating sequential integer ids
+ */
 export class TransactionId extends EntityId {
-	constructor(value = genTimestampNumericId()) {
+	constructor(value = randomInt(999_999)) {
 		super(value);
 	}
 }
