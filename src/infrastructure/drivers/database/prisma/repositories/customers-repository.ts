@@ -11,7 +11,11 @@ import { type Customer } from '@/enterprise/entities/user/customer';
 
 @Injectable()
 export class PrismaCustomersRepository implements CustomersRepository {
-	constructor(private readonly prismaService: PrismaService) {}
+	readonly #mapper: PrismaCustomerMapper;
+
+	constructor(private readonly prismaService: PrismaService) {
+		this.#mapper = new PrismaCustomerMapper();
+	}
 
 	async delete(id: string): Promise<void> {
 		await this.prismaService.customer.delete({
@@ -25,50 +29,44 @@ export class PrismaCustomersRepository implements CustomersRepository {
 		const prismaCustomers = await this.prismaService.customer.findMany();
 
 		const prismaCustomersMappedToDomain = prismaCustomers.map(
-			new PrismaCustomerMapper().toDomain,
+			this.#mapper.toDomain,
 		);
 
 		return prismaCustomersMappedToDomain || [];
 	}
 
 	async findByCPF(CPF: string): Promise<Customer | null> {
-		const prismaCustomer = await this.prismaService.customer.findUnique({
+		const customer = await this.prismaService.customer.findUnique({
 			where: {
 				CPF,
 			},
 		});
 
-		if (!prismaCustomer) return null;
-
-		return new PrismaCustomerMapper().toDomain(prismaCustomer);
+		return customer ? this.#mapper.toDomain(customer) : null;
 	}
 
 	async findByEmail(email: string): Promise<Customer | null> {
-		const prismaCustomer = await this.prismaService.customer.findUnique({
+		const customer = await this.prismaService.customer.findUnique({
 			where: {
 				email,
 			},
 		});
 
-		if (!prismaCustomer) return null;
-
-		return new PrismaCustomerMapper().toDomain(prismaCustomer);
+		return customer ? this.#mapper.toDomain(customer) : null;
 	}
 
 	async findById(id: string): Promise<Customer | null> {
-		const prismaCustomer = await this.prismaService.customer.findUnique({
+		const customer = await this.prismaService.customer.findUnique({
 			where: {
 				id,
 			},
 		});
 
-		if (!prismaCustomer) return null;
-
-		return new PrismaCustomerMapper().toDomain(prismaCustomer);
+		return customer ? this.#mapper.toDomain(customer) : null;
 	}
 
 	async upsert(customer: Customer): Promise<void> {
-		const customerMappedToPrisma = new PrismaCustomerMapper().toInfra(customer);
+		const customerMappedToPrisma = this.#mapper.toInfra(customer);
 
 		const walletMappedToPrisma = new PrismaWalletMapper().toInfra(
 			customer.getProps().wallet,

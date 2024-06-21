@@ -10,7 +10,11 @@ import { type Shopkeeper } from '@/enterprise/entities/user/shopkeeper';
 
 @Injectable()
 export class PrismaShopkeepersRepository implements ShopkeepersRepository {
-	constructor(private readonly prismaService: PrismaService) {}
+	readonly #mapper: PrismaShopkeeperMapper;
+
+	constructor(private readonly prismaService: PrismaService) {
+		this.#mapper = new PrismaShopkeeperMapper();
+	}
 
 	async delete(id: string): Promise<void> {
 		await this.prismaService.shopkeeper.delete({
@@ -24,64 +28,54 @@ export class PrismaShopkeepersRepository implements ShopkeepersRepository {
 		const prismaShopkeepers = await this.prismaService.shopkeeper.findMany();
 
 		const prismaShopkeepersMappedToDomain = prismaShopkeepers.map(
-			new PrismaShopkeeperMapper().toDomain,
+			this.#mapper.toDomain,
 		);
 
 		return prismaShopkeepersMappedToDomain || [];
 	}
 
 	async findByCPF(CPF: string): Promise<Shopkeeper | null> {
-		const prismaShopkeeper = await this.prismaService.shopkeeper.findUnique({
+		const shopkeeper = await this.prismaService.shopkeeper.findUnique({
 			where: {
 				CPF,
 			},
 		});
 
-		if (!prismaShopkeeper) return null;
-
-		return new PrismaShopkeeperMapper().toDomain(prismaShopkeeper);
+		return shopkeeper ? this.#mapper.toDomain(shopkeeper) : null;
 	}
 
 	async findByCNPJ(CNPJ: string): Promise<Shopkeeper | null> {
-		const prismaShopkeeper = await this.prismaService.shopkeeper.findUnique({
+		const shopkeeper = await this.prismaService.shopkeeper.findUnique({
 			where: {
 				CNPJ,
 			},
 		});
 
-		if (!prismaShopkeeper) return null;
-
-		return new PrismaShopkeeperMapper().toDomain(prismaShopkeeper);
+		return shopkeeper ? this.#mapper.toDomain(shopkeeper) : null;
 	}
 
 	async findByEmail(email: string): Promise<Shopkeeper | null> {
-		const prismaShopkeeper = await this.prismaService.shopkeeper.findUnique({
+		const shopkeeper = await this.prismaService.shopkeeper.findUnique({
 			where: {
 				email,
 			},
 		});
 
-		if (!prismaShopkeeper) return null;
-
-		return new PrismaShopkeeperMapper().toDomain(prismaShopkeeper);
+		return shopkeeper ? this.#mapper.toDomain(shopkeeper) : null;
 	}
 
 	async findById(id: string): Promise<Shopkeeper | null> {
-		const prismaShopkeeper = await this.prismaService.shopkeeper.findUnique({
+		const shopkeeper = await this.prismaService.shopkeeper.findUnique({
 			where: {
 				id,
 			},
 		});
 
-		if (!prismaShopkeeper) return null;
-
-		return new PrismaShopkeeperMapper().toDomain(prismaShopkeeper);
+		return shopkeeper ? this.#mapper.toDomain(shopkeeper) : null;
 	}
 
 	async upsert(shopkeeper: Shopkeeper): Promise<void> {
-		const shopkeeperMappedToPrisma = new PrismaShopkeeperMapper().toInfra(
-			shopkeeper,
-		);
+		const shopkeeperMappedToPrisma = this.#mapper.toInfra(shopkeeper);
 
 		await this.prismaService.shopkeeper.upsert({
 			where: {
