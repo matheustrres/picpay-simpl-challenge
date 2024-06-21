@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
 import { PrismaShopkeeperMapper } from '../mappers/shopkeeper-mapper';
+import { PrismaWalletMapper } from '../mappers/wallet-mapper';
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import { PrismaService } from '../prisma.service';
 
@@ -77,12 +78,27 @@ export class PrismaShopkeepersRepository implements ShopkeepersRepository {
 	async upsert(shopkeeper: Shopkeeper): Promise<void> {
 		const shopkeeperMappedToPrisma = this.#mapper.toInfra(shopkeeper);
 
-		await this.prismaService.shopkeeper.upsert({
-			where: {
-				id: shopkeeper.id.toString(),
-			},
-			create: shopkeeperMappedToPrisma,
-			update: shopkeeperMappedToPrisma,
+		const walletMappedToPrisma = new PrismaWalletMapper().toInfra(
+			shopkeeper.getProps().wallet,
+		);
+
+		await this.prismaService.$transaction(async (prisma) => {
+			const wallet = await prisma.wallet.create({
+				data: walletMappedToPrisma,
+			});
+
+			const commonData = {
+				...shopkeeperMappedToPrisma,
+				walletId: wallet.id,
+			};
+
+			await prisma.shopkeeper.upsert({
+				where: {
+					id: shopkeeper.id.toString(),
+				},
+				create: commonData,
+				update: commonData,
+			});
 		});
 	}
 }
